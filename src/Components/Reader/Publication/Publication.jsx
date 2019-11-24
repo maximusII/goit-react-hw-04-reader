@@ -1,10 +1,9 @@
-import React, { Fragment } from 'react';
-import styles from './Publication.module.css';
-import PropTypes from 'prop-types';
+import React, { Fragment } from "react";
+import styles from "./Publication.module.css";
+import PropTypes from "prop-types";
 
 const Publication = ({ publication }) => {
-  const { title } = publication;
-  const { text } = publication;
+  const { title, text } = publication;
   return (
     <Fragment>
       <article className={styles.publication}>
@@ -16,7 +15,7 @@ const Publication = ({ publication }) => {
 };
 
 Publication.propTypes = {
-  publication: PropTypes.object,
+  publication: PropTypes.object
 };
 
 export default Publication;

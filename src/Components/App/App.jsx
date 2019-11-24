@@ -1,17 +1,15 @@
-import React from 'react';
-import styles from './App.module.css';
-import Reader from '../Reader/Reader';
-import publications from '../Reader/data/publications.json';
+import React from "react";
+import { Route, Switch, Redirect, withRouter } from "react-router-dom";
+import styles from "./App.module.css";
+import Reader from "../Reader/Reader";
 
 const App = () => (
   <div className={styles.App}>
-    <Reader
-      items={publications}
-      initialPageNumber={1}
-      isPrevButtonActive={true}
-      isNextButtonActive={true}
-    />
+    <Switch>
+      <Route path="/reader" component={Reader} />
+      <Redirect from="/" to="/reader" />
+    </Switch>
   </div>
 );
 
-export default App;
+export default withRouter(App);

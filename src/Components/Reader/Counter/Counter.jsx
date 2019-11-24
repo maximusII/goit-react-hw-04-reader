@@ -1,24 +1,20 @@
-import React, { Component, Fragment } from 'react';
-import styles from './Counter.module.css';
-import PropTypes from 'prop-types';
+import React, { Fragment } from "react";
+import styles from "./Counter.module.css";
+import PropTypes from "prop-types";
 
-class Counter extends Component {
-  static propTypes = {
-    activePageNumber: PropTypes.number.isRequired,
-    lastPageNumber: PropTypes.number.isRequired,
-  };
+const Counter = ({ activePageNumber, lastPageNumber }) => {
+  return (
+    <Fragment>
+      <p className={styles.counter}>
+        {activePageNumber}/{lastPageNumber}
+      </p>
+    </Fragment>
+  );
+};
 
-  render() {
-    const { activePageNumber } = this.props;
-    const { lastPageNumber } = this.props;
-    return (
-      <Fragment>
-        <p className={styles.counter}>
-          {activePageNumber}/{lastPageNumber}
-        </p>
-      </Fragment>
-    );
-  }
-}
+Counter.propTypes = {
+  activePageNumber: PropTypes.number.isRequired,
+  lastPageNumber: PropTypes.number.isRequired
+};
 
 export default Counter;

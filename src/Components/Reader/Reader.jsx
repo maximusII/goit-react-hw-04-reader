@@ -1,38 +1,47 @@
-import React, { Component } from 'react';
-import Controls from './Controls/Controls';
-import Counter from './Counter/Counter';
-import Publication from './Publication/Publication';
-import styles from './Reader.module.css';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import Controls from "./Controls/Controls";
+import Counter from "./Counter/Counter";
+import Publication from "./Publication/Publication";
+import styles from "./Reader.module.css";
+import publications from "../Reader/data/publications.json";
+import queryString from "query-string";
 
 class Reader extends Component {
-  static propTypes = {
-    items: PropTypes.array,
-    initialPageNumber: PropTypes.number.isRequired,
-    isPrevButtonActive: PropTypes.bool,
-    isNextButtonActive: PropTypes.bool,
-  };
+  state = {};
 
-  state = {
-    activePageNumber: this.props.initialPageNumber,
-  };
+  componentDidMount() {
+    const { location, history } = this.props;
+    history.push({
+      ...location,
+      search: location.search
+        ? `item=${+queryString.parse(location.search).item}`
+        : "item=1"
+    });
+  }
 
   handlePageNumber = e => {
     const buttonName = e.target.name;
+    const { location, history } = this.props;
+    const currentItemNumber = Number(location.search.slice(6));
 
-    buttonName === 'forward'
-      ? this.setState(prevState => {
-          return { activePageNumber: prevState.activePageNumber + 1 };
-        })
-      : this.setState(prevState => {
-          return { activePageNumber: prevState.activePageNumber - 1 };
-        });
+    if (buttonName === "forward" && currentItemNumber < publications.length) {
+      history.push({
+        ...location,
+        search: `item=${currentItemNumber + 1}`
+      });
+    } else if (buttonName !== "forward" && currentItemNumber > 1) {
+      history.push({
+        ...location,
+        search: `item=${currentItemNumber - 1}`
+      });
+    }
   };
 
   render() {
-    const { activePageNumber } = this.state;
-    const { items } = this.props;
-    const article = items[activePageNumber - 1];
+    const { location } = this.props;
+    const activePageNumber = +queryString.parse(location.search).item || 1;
+    const items = publications;
+    const article = publications[activePageNumber - 1];
 
     return (
       <div className={styles.reader}>
