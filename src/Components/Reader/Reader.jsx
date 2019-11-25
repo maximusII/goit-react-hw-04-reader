@@ -1,21 +1,25 @@
-import React, { Component } from "react";
-import Controls from "./Controls/Controls";
-import Counter from "./Counter/Counter";
-import Publication from "./Publication/Publication";
-import styles from "./Reader.module.css";
-import publications from "../Reader/data/publications.json";
-import queryString from "query-string";
+import React, { Component } from 'react';
+import Controls from './Controls/Controls';
+import Counter from './Counter/Counter';
+import Publication from './Publication/Publication';
+import styles from './Reader.module.css';
+import publications from '../Reader/data/publications.json';
+import queryString from 'query-string';
 
 class Reader extends Component {
   state = {};
 
   componentDidMount() {
     const { location, history } = this.props;
+    console.log(location);
     history.push({
       ...location,
-      search: location.search
-        ? `item=${+queryString.parse(location.search).item}`
-        : "item=1"
+      search:
+        location.search &&
+        +queryString.parse(location.search).item <= publications.length &&
+        +queryString.parse(location.search).item > 0
+          ? `item=${+queryString.parse(location.search).item}`
+          : 'item=1',
     });
   }
 
@@ -24,22 +28,26 @@ class Reader extends Component {
     const { location, history } = this.props;
     const currentItemNumber = Number(location.search.slice(6));
 
-    if (buttonName === "forward" && currentItemNumber < publications.length) {
+    if (buttonName === 'forward' && currentItemNumber < publications.length) {
       history.push({
         ...location,
-        search: `item=${currentItemNumber + 1}`
+        search: `item=${currentItemNumber + 1}`,
       });
-    } else if (buttonName !== "forward" && currentItemNumber > 1) {
+    } else if (buttonName !== 'forward' && currentItemNumber > 1) {
       history.push({
         ...location,
-        search: `item=${currentItemNumber - 1}`
+        search: `item=${currentItemNumber - 1}`,
       });
     }
   };
 
   render() {
     const { location } = this.props;
-    const activePageNumber = +queryString.parse(location.search).item || 1;
+    const activePageNumber =
+      +queryString.parse(location.search).item <= publications.length &&
+      +queryString.parse(location.search).item > 0
+        ? +queryString.parse(location.search).item
+        : 1;
     const items = publications;
     const article = publications[activePageNumber - 1];
 
